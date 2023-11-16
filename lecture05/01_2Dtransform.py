@@ -39,7 +39,8 @@ def warpImage(img, H):
     Ht = np.array(
         [[1, 0, t[0]], [0, 1, t[1]], [0, 0, 1]], dtype=np.float32
     )  # translate
-    result = cv2.warpPerspective(img, Ht @ H, (xmax - xmin, ymax - ymin))
+    size = (int(np.ceil(xmax - xmin)), int(np.ceil(ymax - ymin)))
+    result = cv2.warpPerspective(img, Ht @ H, size)
     return result
 
 
@@ -48,13 +49,13 @@ if __name__ == "__main__":
     rows, cols, ch = img.shape
 
     # Perspective transformation example
-    #    pts1 = np.float32([[0, 0], [rows - 1, 0], [0, cols - 1], [rows - 1, cols - 1]])
-    #    pts2 = np.float32([[20, 20], [rows - 50, 0], [0, cols - 1], [rows - 1, cols - 1]])
-    #    H = cv2.getPerspectiveTransform(pts1, pts2)
+    pts1 = np.float32([[0, 0], [rows - 1, 0], [0, cols - 1], [rows - 1, cols - 1]])
+    pts2 = np.float32([[20, 20], [rows - 50, 0], [0, cols - 1], [rows - 1, cols - 1]])
+    H = cv2.getPerspectiveTransform(pts1, pts2)
 
     # Rotation example
-    theta = 30.0 / 180.0 * np.pi
-    H = rotation_matrix(theta)
+    # theta = 30.0 / 180.0 * np.pi
+    # H = rotation_matrix(theta)
 
     # Warp image
     dst = warpImage(img, H)
